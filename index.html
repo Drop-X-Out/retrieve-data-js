@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save and Retrieve Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input, textarea {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #savedData {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9e9e9;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Save and Retrieve Data</h1>
+        <form id="dataForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            
+            <label for="message">Message:</label>
+            <textarea id="message" rows="4" required></textarea>
+            
+            <button type="submit">Save Data</button>
+        </form>
+        
+        <button id="retrieveData">Retrieve Saved Data</button>
+        
+        <div id="savedData"></div>
+    </div>
+
+    <script>
+        const dataForm = document.getElementById('dataForm');
+        const retrieveDataBtn = document.getElementById('retrieveData');
+        const savedDataDiv = document.getElementById('savedData');
+
+        dataForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            
+            const data = {
+                name: name,
+                message: message,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            localStorage.setItem('savedData', JSON.stringify(data));
+            alert('Data saved successfully!');
+            
+            dataForm.reset();
+        });
+
+        retrieveDataBtn.addEventListener('click', function() {
+            const savedData = localStorage.getItem('savedData');
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                savedDataDiv.innerHTML = `
+                    <h3>Retrieved Data:</h3>
+                    <p><strong>Name:</strong> ${data.name}</p>
+                    <p><strong>Message:</strong> ${data.message}</p>
+                    <p><strong>Saved on:</strong> ${data.timestamp}</p>
+                `;
+            } else {
+                savedDataDiv.innerHTML = '<p>No saved data found.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
